@@ -1,4 +1,5 @@
 # Copyright 2020 ACSONE SA/NV
+# Copyright 2023 Simone Rubino - Aion Tech
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import functools
@@ -51,7 +52,9 @@ class AccountMoveLine(models.Model):
         for index, record in enumerate(records):
             values = old_values[index]
             if values:
-                record.write(old_values[index])
+                record.with_context(
+                    restoring_triple_discount=True,
+                ).update(old_values[index])
         return records
 
     @api.onchange(
